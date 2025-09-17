@@ -4,6 +4,7 @@ from typing import List
 
 class Settings(BaseSettings):
     # Application settings
+    app_environment: str = "development"
     app_url: str = "http://localhost:8000"
     app_name: str = "Clean Architecture FastAPI Template"
     api_key: str = "default-api-key"

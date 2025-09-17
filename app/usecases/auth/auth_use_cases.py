@@ -47,7 +47,7 @@ class AuthUseCases:
         payload = self.jwt_service.verify_refresh_token(refresh_token)
         if not payload:
             raise BadRequestException("Invalid refresh token")
-        user = await self.userRepo.find_one_by_filter({"id": payload["id"]})
+        user = await self.userRepo.find_one_by_filter({"id": payload["user"]["id"]})
         if not user:
             raise NotFoundException("User not found")
         is_refresh_token_valid = self.hash_service.verify(

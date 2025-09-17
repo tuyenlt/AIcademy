@@ -25,7 +25,6 @@ def create_app() -> FastAPI:
         openapi_version="3.1.0",
     )
 
-    # Configure OpenAPI security scheme for JWT
     app.openapi_tags = [
         {
             "name": "auth",
@@ -58,7 +57,6 @@ def custom_openapi():
         description="A FastAPI application following Clean Architecture principles",
         routes=app.routes,
     )
-    # Add JWT Bearer security scheme
     openapi_schema["components"]["securitySchemes"] = {
         "HTTPBearer": {
             "type": "http",
@@ -86,11 +84,20 @@ async def root():
 
 
 if __name__ == "__main__":
-    uvicorn.run(
-        "main:app",
-        host=app_settings.server_host,
-        port=app_settings.server_port,
-        reload=app_settings.server_reload,
-        log_level=app_settings.server_log_level,
-        reload_dirs=["."],
-    )
+    if app_settings.app_environment == "production":
+        uvicorn.run(
+            "main:app",
+            host=app_settings.server_host,
+            port=app_settings.server_port,
+            reload=False,
+            log_level=app_settings.server_log_level,
+        )
+    else:
+        uvicorn.run(
+            "main:app",
+            host=app_settings.server_host,
+            port=app_settings.server_port,
+            reload=True,
+            log_level=app_settings.server_log_level,
+            reload_dirs=["."],
+        )
